@@ -1,12 +1,26 @@
 (function($){
+	var messages = {};
+	var dataFunction = $.fn.data;
+
+	var applyText = function(element, key) {
+		$(element).text(messages[key]);
+	};
+
+	$.fn.data = function(key, value) {
+		if (!value)
+			return dataFunction.call($(this), key);
+		dataFunction.call($(this), key, value);
+		if (key == 'i18n')
+			applyText(this, value);
+	};
+
 	$.fn.reword = function(options) {
-		for (key in options) {
-			$(this).find('*[data-i18n=' + key + ']').each(function(index, element){
-				$(element).text(options[key]);
-			});
-			$(this).find('*[data-alt-i18n=' + key + ']').each(function(index, element){
-				$(element).attr('alt', options[key]);
-			});
-		}
-	}
+		messages = options;
+		$('[data-i18n]').each(function(index, element){
+			applyText(element, $(element).data('i18n'));
+		});
+		$('[data-alt-i18n]').each(function(index, element){
+			$(element).attr('alt', messages[$(element).data('alt-i18n')]);
+		});
+	};
 })(window['jQuery']);
