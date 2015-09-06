@@ -1,9 +1,18 @@
 (function($){
 	var messages = {};
 	var dataFunction = $.fn.data;
+	var appendFunciton = $.fn.append;
 
 	var applyText = function(element, key) {
 		$(element).text(messages[key]);
+	};
+
+	$.fn.append = function(elements) {
+		var appendReturn = appendFunciton.call(this, elements);
+		appendReturn.find('[data-i18n]').each(function(index, element){
+		 	applyText(element, $(element).data('i18n'));
+		});
+		return appendReturn;
 	};
 
 	$.fn.data = function(key, value) {

@@ -57,5 +57,14 @@ describe('reword.js', function() {
 			$('.test-element').data('test', 'msg2');
 			expect($('.test-element').text()).toEqual('Test message 1');
 		});
+
+		it('appending html places messages', function(){
+			$('.test-element').reword({
+				'msg1': 'Test message 1',
+				'msg2': 'Test message 2'
+			});
+			$('.test-element').append('<div id="appendedDiv" data-i18n="msg2"/>');
+			expect($('#appendedDiv').text()).toEqual('Test message 2');
+		});
 	});
 });
