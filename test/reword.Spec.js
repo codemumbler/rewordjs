@@ -58,13 +58,16 @@ describe('reword.js', function() {
 			expect($('.test-element').text()).toEqual('Test message 1');
 		});
 
-		it('appending html places messages', function(){
+		it('appending html places messages', function(done){
 			$('.test-element').reword({
 				'msg1': 'Test message 1',
 				'msg2': 'Test message 2'
 			});
 			$('.test-element').append('<div id="appendedDiv" data-i18n="msg2"/>');
-			expect($('#appendedDiv').text()).toEqual('Test message 2');
+			setTimeout(function(){
+				expect($('#appendedDiv').text()).toEqual('Test message 2');
+			}, 200);
+			done();
 		});
 	});
 });
