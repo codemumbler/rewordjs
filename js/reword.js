@@ -3,8 +3,10 @@
 	var dataFunction = $.fn.data;
 
 	var applyText = function(element, key) {
-		if (key)
+		if (key) {
 			$(element).text(messages[key]);
+			$(document.body).trigger('reword', element, key, messages[key]);
+		}
 	};
 
 	MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
@@ -39,5 +41,6 @@
 		$('[data-alt-i18n]').each(function(index, element){
 			$(element).attr('alt', messages[$(element).data('alt-i18n')]);
 		});
+		return $(this);
 	};
 })(window['jQuery']);

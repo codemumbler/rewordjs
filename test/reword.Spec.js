@@ -62,19 +62,20 @@ describe('reword.js', function() {
 			var originalTimeout;
 			beforeEach(function() {
 				originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-				jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+				jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
 			});
 
 			it('appending html places messages', function(done){
-				$('.test-element').reword({
+				$(document.body).reword({
 					'msg1': 'Test message 1',
 					'msg2': 'Test message 2'
-				});
-				$(document.body).append('<div id="appendedDiv" class="async-test-element" data-i18n="msg2"/>');
-				setTimeout(function(){
-					expect($('#appendedDiv').text()).toEqual('Test message 2');
-					done();
-				}, 100);
+				}).on('reword', function(event, element){
+					if ($(element).attr('id') == 'appendedDiv') {
+						expect($('#appendedDiv').text()).toEqual('Test message 2');
+						done();
+						$(document.body).off('reword');
+					}
+				}).append('<div id="appendedDiv" class="async-test-element" data-i18n="msg2"/>');
 			});
 
 			afterEach(function() {
