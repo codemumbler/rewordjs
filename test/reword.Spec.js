@@ -4,7 +4,7 @@ describe('reword.js', function() {
 		'msg2': 'Test message 2',
 		'msg-alt': 'Test alt message'
 	};
-	
+
 	beforeEach(function() {
 		$(document.body).append('<div class="test-element" data-i18n="msg1"/>')
 	});
@@ -64,13 +64,24 @@ describe('reword.js', function() {
 
 			it('appending html places messages', function(done) {
 				$(document.body).reword(messages)
-					.on('reword', function(event, element) {
+					.on('reword', function appendCallback(event, element) {
 						if ($(element).attr('id') == 'appendedDiv') {
 							expect($('#appendedDiv').text()).toEqual('Test message 2');
 							done();
-							$(document.body).off('reword');
+							$(document.body).off('reword', appendCallback);
 						}
 					}).append('<div id="appendedDiv" class="async-test-element" data-i18n="msg2"/>');
+			});
+
+			it('prepending html places messages', function prependCallback(done) {
+				$(document.body).reword(messages)
+					.on('reword', function(event, element) {
+						if ($(element).attr('id') == 'prependedDiv') {
+							expect($('#prependedDiv').text()).toEqual('Test message 2');
+							done();
+							$(document.body).off('reword', prependCallback);
+						}
+					}).prepend('<div id="prependedDiv" class="async-test-element" data-i18n="msg2"/>');
 			});
 
 			afterEach(function() {
