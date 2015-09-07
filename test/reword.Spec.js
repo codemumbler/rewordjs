@@ -58,16 +58,29 @@ describe('reword.js', function() {
 			expect($('.test-element').text()).toEqual('Test message 1');
 		});
 
-		it('appending html places messages', function(done){
-			$('.test-element').reword({
-				'msg1': 'Test message 1',
-				'msg2': 'Test message 2'
+		describe(" - MutationObserver - ", function() {
+			var originalTimeout;
+			beforeEach(function() {
+				originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+				jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 			});
-			$('.test-element').append('<div id="appendedDiv" data-i18n="msg2"/>');
-			setTimeout(function(){
-				expect($('#appendedDiv').text()).toEqual('Test message 2');
-			}, 200);
-			done();
+
+			it('appending html places messages', function(done){
+				$('.test-element').reword({
+					'msg1': 'Test message 1',
+					'msg2': 'Test message 2'
+				});
+				$(document.body).append('<div id="appendedDiv" class="async-test-element" data-i18n="msg2"/>');
+				setTimeout(function(){
+					expect($('#appendedDiv').text()).toEqual('Test message 2');
+					done();
+				}, 100);
+			});
+
+			afterEach(function() {
+				jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+				$('.async-test-element').remove();
+			});
 		});
 	});
 });

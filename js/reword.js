@@ -3,30 +3,23 @@
 	var dataFunction = $.fn.data;
 
 	var applyText = function(element, key) {
-		$(element).text(messages[key]);
+		if (key)
+			$(element).text(messages[key]);
 	};
 
 	MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
 	var observer = new MutationObserver(function(mutations, observer) {
 		for (var mIndex=0; mIndex < mutations.length; mIndex++) {
-			if (mutations[mIndex].addedNodes.length != 0) {
-				for (var i=0; i < mutations[mIndex].addedNodes.length; i++) {
-					if ($(mutations[mIndex].addedNodes[i]).data('i18n')) {
-						$(mutations[mIndex].addedNodes[i]).text(messages[$(mutations[mIndex].addedNodes[i]).data('i18n')]);
-					}
-				}
-			}
+			var mutation = mutations[mIndex];
+			$(mutation.addedNodes).each(function(index, addedNode){
+				applyText(addedNode, $(addedNode).data('i18n'));
+			});
 		}
 	});
 
 	observer.observe(document, {
-	  subtree: true,
-		characterData: true,
-	  attributes: true,
-		attributeFilter: ["data-i18n"],
-		characterDataOldValue: true,
-		attributeOldValue: true,
+		subtree: true,
 		childList: true
 	});
 
