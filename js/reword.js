@@ -1,4 +1,4 @@
-(function($){
+(function($) {
 	var messages = {};
 	var dataFunction = $.fn.data;
 
@@ -12,9 +12,9 @@
 	MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
 	var observer = new MutationObserver(function(mutations, observer) {
-		for (var mIndex=0; mIndex < mutations.length; mIndex++) {
+		for (var mIndex = 0; mIndex < mutations.length; mIndex++) {
 			var mutation = mutations[mIndex];
-			$(mutation.addedNodes).each(function(index, addedNode){
+			$(mutation.addedNodes).each(function(index, addedNode) {
 				applyText(addedNode, $(addedNode).data('i18n'));
 			});
 		}
@@ -35,10 +35,10 @@
 
 	$.fn.reword = function(options) {
 		messages = options;
-		$('[data-i18n]').each(function(index, element){
+		$('[data-i18n]').each(function(index, element) {
 			applyText(element, $(element).data('i18n'));
 		});
-		$('[data-alt-i18n]').each(function(index, element){
+		$('[data-alt-i18n]').each(function(index, element) {
 			$(element).attr('alt', messages[$(element).data('alt-i18n')]);
 		});
 		return $(this);

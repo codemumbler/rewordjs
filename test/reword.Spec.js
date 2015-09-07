@@ -65,11 +65,11 @@ describe('reword.js', function() {
 				jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
 			});
 
-			it('appending html places messages', function(done){
+			it('appending html places messages', function(done) {
 				$(document.body).reword({
 					'msg1': 'Test message 1',
 					'msg2': 'Test message 2'
-				}).on('reword', function(event, element){
+				}).on('reword', function(event, element) {
 					if ($(element).attr('id') == 'appendedDiv') {
 						expect($('#appendedDiv').text()).toEqual('Test message 2');
 						done();
