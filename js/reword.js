@@ -33,14 +33,29 @@
 			applyText(this, value);
 	};
 
-	$.fn.reword = function(options) {
-		messages = options;
+	var applyMessages = function() {
 		$('[data-i18n]').each(function(index, element) {
 			applyText(element, $(element).data('i18n'));
 		});
 		$('[data-alt-i18n]').each(function(index, element) {
 			$(element).attr('alt', messages[$(element).data('alt-i18n')]);
 		});
+	};
+
+	$.fn.reword = function(options) {
+		if (options.messages) {
+			messages = options.messages;
+			applyMessages();
+		}
+		if (options.url) {
+			$.ajax({
+				'url': options.url,
+				'data': 'json'
+			}).done(function(loadedMessages){
+				messages = loadedMessages;
+				applyMessages();
+			});
+		}
 		return $(this);
 	};
 })(window['jQuery']);
