@@ -43,6 +43,18 @@ describe('reword.js', function() {
 				$('.test-element').reword(options);
 				expect($('.test-element').text()).toEqual('Test message 1');
 			});
+
+			it('Two languages message', function() {
+				var frOptions = $.extend(options);
+				frOptions.messages = {
+					'msg1': {
+						'en': 'Test message 1',
+						'fr': 'Essai message 1'
+					}
+				};
+				$('.test-element').attr('lang', 'fr').reword(frOptions);
+				expect($('.test-element').text()).toEqual('Essai message 1');
+			});
 		});
 
 		describe('place message dynamically', function() {

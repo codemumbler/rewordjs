@@ -4,8 +4,13 @@
 
 	var applyText = function(element, key) {
 		if (key) {
-			$(element).text(messages[key]);
-			$(document.body).trigger('reword', element, key, messages[key]);
+			var lang = $(element).closest('[lang]').attr('lang');
+			var message = messages[key];
+			if (typeof message === 'object') {
+				message = message[lang];
+			}
+			$(element).text(message);
+			$(document.body).trigger('reword', element, key, message);
 		}
 	};
 
