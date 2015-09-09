@@ -84,6 +84,18 @@ describe('reword.js', function() {
 				$('.test-element').reword(newOptions);
 				expect($('.test-element').text()).toEqual('Test message 1');
 			});
+
+			it('data-alt-i18n languages', function() {
+				var frOptions = $.extend(options);
+				frOptions.messages = {
+					'msg1': {
+						'en': 'Test message 1',
+						'fr': 'Essai Message 1'
+					}
+				};
+				$('.test-element').attr('lang', 'fr').data('alt-i18n', 'msg1').reword(frOptions);
+				expect($('.test-element').attr('alt')).toEqual('Essai Message 1');
+			});
 		});
 
 		describe('place message dynamically', function() {

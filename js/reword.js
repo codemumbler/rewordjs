@@ -8,14 +8,20 @@
 			applyText(element, $(element).data('i18n'));
 		});
 		$('[data-alt-i18n]').each(function(index, element) {
-			$(element).attr('alt', messages[$(element).data('alt-i18n')]);
+			$(element).attr('alt', getMessage(element, $(element).data('alt-i18n')));
 		});
 		$('[data-title-i18n]').each(function(index, element) {
-			$(element).attr('title', messages[$(element).data('title-i18n')]);
+			$(element).attr('title', getMessage(element, $(element).data('title-i18n')));
 		});
 	};
 
 	var applyText = function(element, key) {
+		var message = getMessage(element, key);
+		$(element).text(message);
+		$(document.body).trigger('reword', element, key, message);
+	};
+
+	var getMessage = function(element, key) {
 		if (!key) return;
 		var lang = $(element).closest('[lang]').attr('lang');
 		var message = messages[key];
@@ -25,8 +31,7 @@
 			else
 				message = message[defaultLanguage];
 		}
-		$(element).text(message);
-		$(document.body).trigger('reword', element, key, message);
+		return message;
 	};
 
 	(function() {
@@ -53,6 +58,7 @@
 			$(this).attr('data-' + key, value);
 			applyMessages();
 		}
+		return $(this);
 	};
 
 	$.fn.reword = function(options) {
