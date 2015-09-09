@@ -12,6 +12,7 @@ describe('reword.js', function() {
 	describe('static content', function() {
 		beforeEach(function() {
 			$(document.body).append('<div class="test-element" data-i18n="msg1"/>');
+			$('html').attr('lang', 'en');
 		});
 
 		afterEach(function() {
