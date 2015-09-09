@@ -49,8 +49,10 @@
 		if (!value)
 			return dataFunction.call($(this), key);
 		dataFunction.call($(this), key, value);
-		if (key == 'i18n')
-			applyText(this, value);
+		if (key.match('.*i18n')) {
+			$(this).attr('data-' + key, value);
+			applyMessages();
+		}
 	};
 
 	$.fn.reword = function(options) {

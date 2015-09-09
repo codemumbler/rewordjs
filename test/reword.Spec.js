@@ -99,6 +99,13 @@ describe('reword.js', function() {
 				$('.test-element').data('test', 'msg2');
 				expect($('.test-element').text()).toEqual('Test message 1');
 			});
+
+			it('changes as data-alt-i18n changes', function() {
+				$(document.body).reword(options);
+				$('.test-element').data('alt-i18n', 'msg2');
+				expect($('.test-element').data('alt-i18n')).toEqual('msg2');
+				expect($('.test-element').attr('alt')).toEqual('Test message 2');
+			});
 		});
 	});
 
