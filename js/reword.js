@@ -10,6 +10,9 @@
 		$('[data-alt-i18n]').each(function(index, element) {
 			$(element).attr('alt', messages[$(element).data('alt-i18n')]);
 		});
+		$('[data-title-i18n]').each(function(index, element) {
+			$(element).attr('title', messages[$(element).data('title-i18n')]);
+		});
 	};
 
 	var applyText = function(element, key) {

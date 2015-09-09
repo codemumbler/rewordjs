@@ -2,7 +2,8 @@ describe('reword.js', function() {
 	var messages = {
 		'msg1': 'Test message 1',
 		'msg2': 'Test message 2',
-		'msg-alt': 'Test alt message'
+		'msg-alt': 'Test alt message',
+		'msg-title': 'Test title message'
 	};
 	var options = {
 		'messages': messages
@@ -37,6 +38,12 @@ describe('reword.js', function() {
 				$(document.body).append('<img class="test-element" data-alt-i18n="msg-alt" src=""/>');
 				$(document.body).reword(options);
 				expect($('img.test-element').attr('alt')).toEqual('Test alt message');
+			});
+
+			it('title text', function() {
+				$(document.body).append('<img class="test-element" data-title-i18n="msg-title" src=""/>');
+				$(document.body).reword(options);
+				expect($('img.test-element').attr('title')).toEqual('Test title message');
 			});
 
 			it('on specific element places text', function() {
