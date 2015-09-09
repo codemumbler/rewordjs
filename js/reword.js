@@ -63,18 +63,20 @@
 
 	$.fn.reword = function(options) {
 		defaultLanguage = document.documentElement.lang;
-		if (options.messages) {
-			messages = options.messages;
-			applyMessages();
-		}
-		if (options.url) {
-			$.ajax({
-				'url': options.url,
-				'data': 'json'
-			}).done(function(loadedMessages){
-				messages = loadedMessages;
+		if (options) {
+			if (options.messages) {
+				messages = options.messages;
 				applyMessages();
-			});
+			}
+			if (options.url) {
+				$.ajax({
+					'url': options.url,
+					'data': 'json'
+				}).done(function(loadedMessages){
+					messages = loadedMessages;
+					applyMessages();
+				});
+			}
 		}
 		return $(this);
 	};

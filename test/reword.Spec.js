@@ -26,6 +26,10 @@ describe('reword.js', function() {
 			it('jquery chaining', function() {
 				expect($('.test-element').reword(options).hasClass('test-element')).toBe(true);
 			});
+
+			it('no options', function() {
+				expect($('.test-element').reword().hasClass('test-element')).toBe(true);
+			});
 		});
 
 		describe('place messages', function() {
