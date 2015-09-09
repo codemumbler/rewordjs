@@ -8,7 +8,7 @@ describe('reword.js', function() {
 		'messages': messages
 	};
 
-	describe('static content', function(){
+	describe('static content', function() {
 		beforeEach(function() {
 			$(document.body).append('<div class="test-element" data-i18n="msg1"/>');
 		});
@@ -49,11 +49,33 @@ describe('reword.js', function() {
 				frOptions.messages = {
 					'msg1': {
 						'en': 'Test message 1',
-						'fr': 'Essai message 1'
+						'fr': 'Essai Message 1'
 					}
 				};
 				$('.test-element').attr('lang', 'fr').reword(frOptions);
-				expect($('.test-element').text()).toEqual('Essai message 1');
+				expect($('.test-element').text()).toEqual('Essai Message 1');
+			});
+
+			it('falls back to default - not an object', function() {
+				var frOptions = $.extend(options);
+				frOptions.messages = {
+					'msg1': 'Test message 1'
+				};
+				$('.test-element').attr('lang', 'fr');
+				$('.test-element').reword(frOptions);
+				expect($('.test-element').text()).toEqual('Test message 1');
+			});
+
+			it('falls back to default - no object property', function() {
+				var newOptions = $.extend(options);
+				newOptions.messages = {
+					'msg1': {
+						'en': 'Test message 1'
+					}
+				};
+				$('.test-element').attr('lang', 'fr');
+				$('.test-element').reword(newOptions);
+				expect($('.test-element').text()).toEqual('Test message 1');
 			});
 		});
 
@@ -73,48 +95,13 @@ describe('reword.js', function() {
 		});
 	});
 
-	describe("MutationObserver - ", function() {
-		var originalTimeout;
-		beforeEach(function() {
-			originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-			jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
-		});
-
-		it('appending html places messages', function(done) {
-			$(document.body).reword(options)
-				.on('reword', function appendCallback(event, element) {
-					if ($(element).attr('id') == 'appendedDiv') {
-						expect($('#appendedDiv').text()).toEqual('Test message 2');
-						done();
-						$(document.body).off('reword', appendCallback);
-					}
-				}).append('<div id="appendedDiv" class="async-test-element" data-i18n="msg2"/>');
-		});
-
-		it('prepending html places messages', function prependCallback(done) {
-			$(document.body).reword(options)
-				.on('reword', function(event, element) {
-					if ($(element).attr('id') == 'prependedDiv') {
-						expect($('#prependedDiv').text()).toEqual('Test message 2');
-						done();
-						$(document.body).off('reword', prependCallback);
-					}
-				}).prepend('<div id="prependedDiv" class="async-test-element" data-i18n="msg2"/>');
-		});
-
-		afterEach(function() {
-			jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
-			$('.async-test-element').remove();
-		});
-	});
-
-	describe("AJAX JSON messages - ", function() {
+	describe('async tests', function() {
 		var originalTimeout, originalAjax;
 		beforeEach(function() {
 			originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
 			jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
 			$(document.body).append('<div class="async-test-element" data-i18n="msg1"/>');
-			originalAjax = $.fn.ajax;
+			originalAjax = $.ajax;
 			$.ajax = function() {
 				defer = $.Deferred();
 				defer.promise({});
@@ -127,19 +114,48 @@ describe('reword.js', function() {
 			};
 		});
 
-		it('load messages via AJAX', function prependCallback(done) {
-			$(document.body).reword({
-				'url': 'messages.json'
-			}).on('reword', function(event, element) {
-				expect($('.async-test-element').text()).toEqual('Test ajax message 1');
-				done();
-			});
-		});
-
 		afterEach(function() {
 			jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
 			$('.async-test-element').remove();
 			$.ajax = originalAjax;
+		});
+
+		describe('MutationObserver - ', function() {
+			it('appending html places messages', function(done) {
+				$(document.body).reword(options)
+					.on('reword', function appendCallback(event, element) {
+						if ($(element).attr('id') == 'appendedDiv') {
+							expect($('#appendedDiv').text()).toEqual('Test message 2');
+							done();
+							$(document.body).off('reword', appendCallback);
+						}
+					})
+					.append('<div id="appendedDiv" class="async-test-element" data-i18n="msg2"/>');
+			});
+
+			it('prepending html places messages', function(done) {
+				$(document.body).reword(options)
+					.on('reword', function prependCallback(event, element) {
+						if ($(element).attr('id') == 'prependedDiv') {
+							expect($('#prependedDiv').text()).toEqual('Test message 2');
+							done();
+							$(document.body).off('reword', prependCallback);
+						}
+					})
+					.prepend('<div id="prependedDiv" class="async-test-element" data-i18n="msg2"/>');
+			});
+		});
+
+		describe('AJAX JSON messages - ', function() {
+			it('load messages via AJAX', function(done) {
+				$(document.body).reword({
+					'url': 'messages.json'
+				}).on('reword', function rewordCallback(event, element) {
+					expect($('.async-test-element').text()).toEqual('Test ajax message 1');
+					done();
+					$(document.body).off('reword', rewordCallback);
+				});
+			});
 		});
 	});
 });
