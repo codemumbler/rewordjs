@@ -1,5 +1,6 @@
 (function($) {
 	var defaultLanguage = 'en';
+	var language;
 	var messages = {};
 	var dataFunction = $.fn.data;
 
@@ -23,7 +24,7 @@
 
 	var getMessage = function(element, key) {
 		if (!key) return;
-		var lang = $(element).closest('[lang]').attr('lang');
+		var lang = getLanguage(element);
 		var message = messages[key];
 		if (typeof message === 'object') {
 			if (message[lang])
@@ -32,6 +33,12 @@
 				message = message[defaultLanguage];
 		}
 		return message;
+	};
+
+	var getLanguage = function(element) {
+		if (language)
+			return language;
+		return $(element).closest('[lang]').attr('lang');
 	};
 
 	(function() {
@@ -62,8 +69,13 @@
 	};
 
 	$.fn.reword = function(options) {
-		defaultLanguage = document.documentElement.lang;
 		if (options) {
+			if (options.language) {
+				defaultLanguage = options.language;
+				language = options.language;
+			} else {
+				defaultLanguage = document.documentElement.lang;
+			}
 			if (options.messages) {
 				messages = options.messages;
 				applyMessages();

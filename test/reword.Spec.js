@@ -101,6 +101,34 @@ describe('reword.js', function() {
 				$('.test-element').attr('lang', 'fr').data('alt-i18n', 'msg1').reword(frOptions);
 				expect($('.test-element').attr('alt')).toEqual('Essai Message 1');
 			});
+
+			it('force language', function() {
+				var forceOptions = $.extend(options);
+				forceOptions = {
+					'language': 'fr',
+					'messages': {
+						'msg1': {
+							'en': 'Test message 1',
+							'fr': 'Essai Message 1'
+						}
+					}
+				};
+				$('.test-element').reword(forceOptions);
+				expect($('.test-element').text()).toEqual('Essai Message 1');
+			});
+
+			it('mo message for a language', function() {
+				var missingMessagesOptions = {
+					'language': 'fr',
+					'messages': {
+						'msg1': {
+							'en': 'Test message 1'
+						}
+					}
+				};
+				$('.test-element').reword(missingMessagesOptions);
+				expect($('.test-element').text()).toEqual('');
+			});
 		});
 
 		describe('place message dynamically', function() {
@@ -122,6 +150,18 @@ describe('reword.js', function() {
 				$('.test-element').data('alt-i18n', 'msg2');
 				expect($('.test-element').data('alt-i18n')).toEqual('msg2');
 				expect($('.test-element').attr('alt')).toEqual('Test message 2');
+			});
+
+			it('change language', function() {
+				$(document.body).reword(options);
+				var changeLanguageOptions = $.extend(options);
+				changeLanguageOptions.language = 'fr';
+				changeLanguageOptions.messages.msg1 = {
+					'en': 'Test message 1',
+					'fr': 'Essai Message 1'
+				};
+				$(document.body).reword(changeLanguageOptions);
+				expect($('.test-element').text()).toEqual('Essai Message 1');
 			});
 		});
 	});
