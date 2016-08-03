@@ -13,7 +13,7 @@ module.exports = function(config) {
     reporters: ['progress', 'coverage'],
     port: 9876,
     colors: true,
-    logLevel: config.LOG_INFO,
+    logLevel: config.DEBUG,
     autoWatch: true,
     browsers: ['Chrome','Firefox'],
     singleRun: false
