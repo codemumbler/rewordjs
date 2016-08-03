@@ -3,9 +3,8 @@ module.exports = function(config) {
     basePath: '',
     frameworks: ['jasmine'],
     files: [
-      'js/lib/*.js',
+      'http://code.jquery.com/jquery-3.1.0.min.js',
       'js/*.js',
-      'test/lib/*.js',
       'test/**/*.Spec.js'
     ],
     exclude: [
@@ -16,7 +15,7 @@ module.exports = function(config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Firefox'],
+    browsers: ['Chrome','Firefox'],
     singleRun: false
   });
 };
