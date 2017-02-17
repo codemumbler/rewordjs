@@ -3,7 +3,7 @@ module.exports = function(config) {
     basePath: '',
     frameworks: ['jasmine'],
     files: [
-      'http://code.jquery.com/jquery-3.1.0.min.js',
+      'http://code.jquery.com/jquery-3.1.1.min.js',
       'js/*.js',
       'test/**/*.Spec.js'
     ],
