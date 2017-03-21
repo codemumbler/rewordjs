@@ -15,7 +15,7 @@
     "karma-jasmine": "^1.1.0"
   },
   "scripts": {
-    "test": "karma start --single-run -browsers=Firefox"
+    "test": "karma start --single-run"
   },
   "repository": {
     "type": "git",
